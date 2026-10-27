@@ -1,13 +1,22 @@
 {
-    "slug": "my_sms",
-    "domain": "sms",
+    "key": "my_sms",
     "name": "我的短信",
-    "description": "一句话描述插件能力（展示在市场列表）。",
-    "developer": "你的 GitHub 用户名或组织",
+    "domain": "sms",
+    "slug": "my_sms",
     "repo": "owner/my_sms-plugin",
     "tag": "v1.0.0",
-    "sha": "可选：审核通过的 commit sha，提供后系统下载该 commit 的代码（最强防篡改）",
-    "released_at": "2026-08-29T00:00:00+08:00",
+    "sha": "可选：审核通过的 commit sha，填写后安装器只下载该 commit 的代码",
+    "version": "1.0.0",
+    "min_platform_version": "1.0.0",
+    "manifest_version": 2,
+    "summary": "一句话描述插件能力（展示在市场列表）",
+    "description": "一句话描述插件能力（v1 字段，当前平台列表读取这一条）",
+    "developer": "你的 GitHub 用户名或组织",
+    "released_at": "2026-10-27T00:00:00+08:00",
     "license": "MIT",
-    "homepage": "https://github.com/owner/my_sms-plugin"
+    "homepage": "https://github.com/owner/my_sms-plugin",
+    "capabilities": [
+        "sms.send"
+    ],
+    "official": false
 }

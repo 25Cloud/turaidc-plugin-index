@@ -1,5 +1,29 @@
 {
     "schema": 1,
-    "updated_at": "2026-08-29T00:00:00+08:00",
-    "plugins": []
+    "schema_version": 2,
+    "updated_at": "2026-10-27T00:00:00+08:00",
+    "plugins": [
+        {
+            "key": "ai_assistant",
+            "name": "AI 助手",
+            "domain": "addons",
+            "slug": "ai_assistant",
+            "repo": "25Cloud/TuraIDC",
+            "path": "backend/plugins/addons/ai_assistant",
+            "ref": "main",
+            "version": "1.0.0",
+            "min_platform_version": "1.0.0",
+            "manifest_version": 2,
+            "summary": "站内 AI 助手：对话、工具调用与权限分级",
+            "description": "站内 AI 助手：对话、工具调用与权限分级",
+            "developer": "25Cloud",
+            "homepage": "https://github.com/25Cloud/TuraIDC",
+            "license": "AGPL-3.0-or-later",
+            "capabilities": [
+                "ai.chat",
+                "ai.tools"
+            ],
+            "official": true
+        }
+    ]
 }
