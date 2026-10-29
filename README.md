@@ -63,8 +63,8 @@ TuraIDC 插件市场的**插件清单仓库**。`plugins.json` 记录全部可�
 | `repo` | ✓ | 插件所在仓库 `owner/repo` | `25Cloud/my_sms-plugin` |
 | `tag` | 独立仓库必填 | Release tag，安装器只下载该 tag 的代码 | `v1.0.0` |
 | `sha` | ✗ | 审核锁定的 commit sha；填写后安装器改用该 commit 并强校验 | `a1b2c3d…` |
-| `path` | — | 插件在仓库内的子目录。**平台暂未实现**：安装器 `PluginMarketService::downloadArchive()` 只读 `repo` / `tag` / `sha`，填了不生效 | `backend/plugins/addons/ai_assistant` |
-| `ref` | — | 子目录所在分支或 tag。**平台暂未实现**，同上 | `main` |
+| `path` | monorepo 必填 | 插件在仓库内的子目录，逐段只允许 `[A-Za-z0-9._-]`（`..`、绝对路径一律拒绝）。安装器按它**精确落位**，不靠深度猜 | `backend/plugins/addons/ai_assistant` |
+| `ref` | monorepo 必填 | 子目录所在分支或 tag；`{ref}` 解析优先级 `sha` → `refs/tags/{tag}` → `refs/heads/{ref}` | `main` |
 | `version` | ✓ | 插件版本，**必须等于插件 `config.php` 的 `info.version`** | `1.0.0` |
 | `min_platform_version` | ✗ | 允许安装的最低平台版本 | `1.0.0` |
 | `manifest_version` | ✗ | 插件清单版本，缺省为 1 | `2` |
@@ -79,15 +79,16 @@ TuraIDC 插件市场的**插件清单仓库**。`plugins.json` 记录全部可�
 
 条目形态只有两种，别混用：
 
-- **独立仓库**：`repo` + `tag`（+ 可选 `sha`）。**当前唯一可用形态。**
-- **monorepo**：`repo` + `path` + `ref`，插件代码随主仓发布。**平台暂未实现**——
-  `PluginMarketService::downloadArchive()` 只读 `repo` / `tag` / `sha`，
-  这类条目执行 `plugin:market:install` 会直接报「插件条目缺少 tag/sha」。
+- **独立仓库**：`repo` + `tag`（+ 可选 `sha`）。**推荐形态**：下载量几百 KB，`sha` 可锁定到审核过的 commit。
+- **monorepo**：`repo` + `path` + `ref`（可与 `sha` 叠加）。插件随主仓一起发布时用。
+  - 安装器会按 `path` 精确落到 `{解压根}/{仓库快照目录}/{path}`，找不到就报错，不会去猜；
+  - 下载的是**整仓快照**（几十 MB），超时取 `PLUGIN_MARKET_MONOREPO_TIMEOUT`（默认 120 秒）；
+  - 只写 `ref: main` 等于跟随分支漂移，上架条目建议 `path` + `sha` 一起填。
 
-随主仓内置发布的插件要想上架，请同时提供**独立发行仓**，条目指向该仓的 `tag` + `sha`：
-官方 AI 助手就是这么做的（主仓 `backend/plugins/addons/ai_assistant` 是唯一真源，
+随主仓内置发布的插件仍**优先提供独立发行仓**（下载小、锁定强、不依赖主仓分支状态）：
+官方 AI 助手就是这么做的——主仓 `backend/plugins/addons/ai_assistant` 是唯一真源，
 发行镜像仓 [`25Cloud/turaidc-plugin-ai-assistant`](https://github.com/25Cloud/turaidc-plugin-ai-assistant)
-逐字节同步并按版本打 tag，条目指向镜像仓）。
+逐字节同步并按版本打 tag，条目指向镜像仓的 `tag` + `sha`。
 
 ## 校验要求
 
